@@ -61,7 +61,7 @@ const data = {
   handle: chalk.white("@keshavashiya"),
   work: `${chalk.white("Software Engineer at")} ${chalk
     .hex("#2b82b2")
-    .bold("Hexooid")}`,
+    .bold("Akrity Computing Pvt Ltd")}`,
   twitter: chalk.gray("https://twitter.com/") + chalk.cyan("keshavashiya"),
   github: chalk.gray("https://github.com/") + chalk.green("keshavashiya"),
   linkedin: chalk.gray("https://linkedin.com/in/") + chalk.blue("keshavashiya"),
