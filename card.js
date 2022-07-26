@@ -17,56 +17,63 @@ clear();
 const prompt = inquirer.createPromptModule();
 
 const questions = [
-  {
-    type: "list",
-    name: "action",
-    message: "What you want to do?",
-    choices: [
-      {
-        name: `Send me an ${chalk.green.bold("email")}?`,
-        value: () => {
-          open("mailto:keshavashiya@outlook.com");
-          console.log("\nDone, see you soon at inbox.\n");
-        },
-      },
-      // {
-      //     name: `Download my ${chalk.magentaBright.bold("Resume")}?`,
-      //     value: () => {
-      //         // cliSpinners.dots;
-      //         const loader = ora({
-      //             text: ' Downloading Resume',
-      //             spinner: cliSpinners.material,
-      //         }).start();
-      //         let pipe = request('https://app.swiftcv.com/@keshavashiya').pipe(fs.createWriteStream('./keshavashiya.html'));
-      //         pipe.on("finish", function () {
-      //             let downloadPath = path.join(process.cwd(), 'keshavashiya.html')
-      //             console.log(`\nResume Downloaded at ${downloadPath} \n`);
-      //             open(downloadPath)
-      //             loader.stop();
-      //         });
-      //     }
-      // },
-      {
-        name: "Just quit.",
-        value: () => {
-          console.log("Hasta la vista.\n");
-        },
-      },
-    ],
-  },
+    {
+        type: "list",
+        name: "action",
+        message: "What you want to do?",
+        choices: [
+            {
+                name: `Send me an ${chalk.green.bold("email")}?`,
+                value: () => {
+                    open("mailto:keshavashiya@outlook.com");
+                    console.log("\nDone, see you soon at inbox.\n");
+                }
+            },
+            // {
+            //     name: `Download my ${chalk.magentaBright.bold("Resume")}?`,
+            //     value: () => {
+            //         // cliSpinners.dots;
+            //         const loader = ora({
+            //             text: ' Downloading Resume',
+            //             spinner: cliSpinners.material,
+            //         }).start();
+            //         let pipe = request('https://anmolsingh.me/api/resume').pipe(fs.createWriteStream('./anmol-resume.html'));
+            //         pipe.on("finish", function () {
+            //             let downloadPath = path.join(process.cwd(), 'anmol-resume.html')
+            //             console.log(`\nResume Downloaded at ${downloadPath} \n`);
+            //             open(downloadPath)
+            //             loader.stop();
+            //         });
+            //     }
+            // },
+            {
+                name: `Schedule a ${chalk.redBright.bold("Meeting")}?`,
+                value: () => {
+                    open('https://calendly.com/keshavashiya/30min');
+                    console.log("\n See you at the meeting \n");
+                }
+            },
+            {
+                name: "Just quit.",
+                value: () => {
+                    console.log("Hasta la vista.\n");
+                }
+            }
+        ]
+    }
 ];
 
 const data = {
-  name: chalk.bold.green("                   Keshav Ashiya"),
-  handle: chalk.white("@keshavashiya"),
-  work: `${chalk.white("Software Engineer at")} ${chalk
-    .hex("#2b82b2")
-    .bold("Akrity Computing Pvt Ltd")}`,
-  twitter: chalk.gray("https://twitter.com/") + chalk.cyan("keshavashiya"),
-  github: chalk.gray("https://github.com/") + chalk.green("keshavashiya"),
-  linkedin: chalk.gray("https://linkedin.com/in/") + chalk.blue("keshavashiya"),
-  web: chalk.cyan("https://keshavashiya.github.io/"),
-  npx: chalk.red("npx") + " " + chalk.white("keshavashiya"),
+    name: chalk.bold.green("                        Keshav Ashiya"),
+    handle: chalk.white("@keshavashiya"),
+    work: `${chalk.white("Software Engineer at")} ${chalk
+        .hex("#2b82b2")
+        .bold("Akrity Computing Pvt. Ltd.")}`,
+    twitter: chalk.gray("https://twitter.com/") + chalk.cyan("keshavashiya"),
+    github: chalk.gray("https://github.com/") + chalk.green("keshavashiya"),
+    linkedin: chalk.gray("https://linkedin.com/in/") + chalk.blue("keshavashiya"),
+    web: chalk.cyan("https://keshavashiya.github.io"),
+    npx: chalk.red("npx") + " " + chalk.white("keshavashiya"),
 
   labelWork: chalk.white.bold("       Work:"),
   labelTwitter: chalk.white.bold("    Twitter:"),
