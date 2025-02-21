@@ -8,7 +8,7 @@ const inquirer = require("inquirer");
 const clear = require("clear");
 const open = require("open");
 const fs = require("fs");
-const request = require("request");
+const axios = require("axios");
 const path = require("path");
 const ora = require("ora");
 const cliSpinners = require("cli-spinners");
@@ -17,63 +17,76 @@ clear();
 const prompt = inquirer.createPromptModule();
 
 const questions = [
-    {
-        type: "list",
-        name: "action",
-        message: "What you want to do?",
-        choices: [
-            {
-                name: `Send me an ${chalk.green.bold("email")}?`,
-                value: () => {
-                    open("mailto:keshavashiya@outlook.com");
-                    console.log("\nDone, see you soon at inbox.\n");
-                }
-            },
-            // {
-            //     name: `Download my ${chalk.magentaBright.bold("Resume")}?`,
-            //     value: () => {
-            //         // cliSpinners.dots;
-            //         const loader = ora({
-            //             text: ' Downloading Resume',
-            //             spinner: cliSpinners.material,
-            //         }).start();
-            //         let pipe = request('https://anmolsingh.me/api/resume').pipe(fs.createWriteStream('./anmol-resume.html'));
-            //         pipe.on("finish", function () {
-            //             let downloadPath = path.join(process.cwd(), 'anmol-resume.html')
-            //             console.log(`\nResume Downloaded at ${downloadPath} \n`);
-            //             open(downloadPath)
-            //             loader.stop();
-            //         });
-            //     }
-            // },
-            {
-                name: `Schedule a ${chalk.redBright.bold("Meeting")}?`,
-                value: () => {
-                    open('https://calendly.com/keshavashiya/30min');
-                    console.log("\n See you at the meeting \n");
-                }
-            },
-            {
-                name: "Just quit.",
-                value: () => {
-                    console.log("Hasta la vista.\n");
-                }
-            }
-        ]
-    }
+  {
+    type: "list",
+    name: "action",
+    message: "What you want to do?",
+    choices: [
+      {
+        name: `Send me an ${chalk.green.bold("email")}?`,
+        value: () => {
+          open("mailto:keshavashiya@outlook.com");
+          console.log("\nDone, see you soon at inbox.\n");
+        },
+      },
+      {
+        name: `Download my ${chalk.magentaBright.bold("Resume")}?`,
+        value: async () => {
+          const loader = ora({
+            text: " Downloading Resume",
+            spinner: cliSpinners.material,
+          }).start();
+
+          try {
+            // Convert Google Docs URL to export URL
+            const docId = "1lz463OeTrOVxVdOt9H_9zAGADIXuKU6B9qPaNeL20AE";
+            const exportUrl = `https://docs.google.com/document/d/${docId}/export?format=pdf`;
+
+            const response = await axios({
+              method: "get",
+              url: exportUrl,
+              responseType: "arraybuffer", // Important for binary files like PDFs
+            });
+
+            const downloadPath = path.join(process.cwd(), "keshavashiya.pdf");
+            fs.writeFileSync(downloadPath, response.data);
+            console.log(`\nResume Downloaded at ${downloadPath} \n`);
+            open(downloadPath);
+            loader.stop();
+          } catch (error) {
+            loader.stop();
+            console.error("\nError downloading resume:", error.message, "\n");
+          }
+        },
+      },
+      {
+        name: `Schedule a ${chalk.redBright.bold("Meeting")}?`,
+        value: () => {
+          open("https://calendly.com/keshavashiya/30min");
+          console.log("\n See you at the meeting \n");
+        },
+      },
+      {
+        name: "Just quit.",
+        value: () => {
+          console.log("Hasta la vista.\n");
+        },
+      },
+    ],
+  },
 ];
 
 const data = {
-    name: chalk.bold.green("                        Keshav Ashiya"),
-    handle: chalk.white("@keshavashiya"),
-    work: `${chalk.white("Software Engineer at")} ${chalk
-        .hex("#2b82b2")
-        .bold("Akrity Computing Pvt. Ltd.")}`,
-    twitter: chalk.gray("https://twitter.com/") + chalk.cyan("keshavashiya"),
-    github: chalk.gray("https://github.com/") + chalk.green("keshavashiya"),
-    linkedin: chalk.gray("https://linkedin.com/in/") + chalk.blue("keshavashiya"),
-    web: chalk.cyan("https://keshavashiya.github.io"),
-    npx: chalk.red("npx") + " " + chalk.white("keshavashiya"),
+  name: chalk.bold.green(`${" ".repeat(28)}Keshav Ashiya`),
+  handle: chalk.white(`${" ".repeat(28)}@keshavashiya`),
+  work: `${chalk.white("Senior Software Engineer at")} ${chalk
+    .hex("#2b82b2")
+    .bold("Akrity Computing Pvt. Ltd.")}`,
+  twitter: chalk.gray("https://twitter.com/") + chalk.cyan("keshavashiya"),
+  github: chalk.gray("https://github.com/") + chalk.green("keshavashiya"),
+  linkedin: chalk.gray("https://linkedin.com/in/") + chalk.blue("keshavashiya"),
+  web: chalk.cyan("https://keshavashiya.github.io"),
+  npx: chalk.red("npx") + " " + chalk.white("keshavashiya"),
 
   labelWork: chalk.white.bold("       Work:"),
   labelTwitter: chalk.white.bold("    Twitter:"),
@@ -83,9 +96,43 @@ const data = {
   labelCard: chalk.white.bold("       Card:"),
 };
 
+function getFormattedItalicText(text) {
+  const terminalWidth = 80;
+  const boxPadding = 4;
+  const maxWidth = terminalWidth - boxPadding * 2;
+
+  // Split text into words
+  const words = text.split(" ");
+  const lines = [];
+  let currentLine = [];
+
+  // Create lines that fit within the box
+  words.forEach((word) => {
+    if ((currentLine.join(" ") + " " + word).length <= maxWidth - 2) {
+      currentLine.push(word);
+    } else {
+      lines.push(currentLine.join(" "));
+      currentLine = [word];
+    }
+  });
+  if (currentLine.length > 0) {
+    lines.push(currentLine.join(" "));
+  }
+
+  // Center and format each line without extra padding
+  return lines.map((line) => {
+    const lineLength = line.length;
+    const availableSpace = maxWidth - lineLength;
+    const padding = Math.max(0, Math.floor(availableSpace / 2) - 2); // Reduced padding
+    return chalk.italic(line); // Removed padding to let boxen handle centering
+  });
+}
+
+// And update the boxen configuration
 const me = boxen(
   [
     `${data.name}`,
+    `${data.handle}`,
     ``,
     `${data.labelWork}  ${data.work}`,
     ``,
@@ -96,10 +143,9 @@ const me = boxen(
     ``,
     `${data.labelCard}  ${data.npx}`,
     ``,
-    `${chalk.italic("I am currently looking for new opportunities,")}`,
-    `${chalk.italic("my inbox is always open. Whether you have a")}`,
-    `${chalk.italic("question or just want to say hi, I will try ")}`,
-    `${chalk.italic("my best to get back to you!")}`,
+    ...getFormattedItalicText(
+      "I am currently looking for new opportunities, my inbox is always open. Whether you have a question or just want to say hi, I will try my best to get back to you!"
+    ),
   ].join("\n"),
   {
     margin: 1,
