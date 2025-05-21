@@ -15,7 +15,7 @@ jobs:
         with:
           node-version: '16.x'
           registry-url: 'https://registry.npmjs.org'
-      - run: npm i  # Using 'npm ci' instead of 'npm i' for more reliable CI builds
+      - run: npm i
       # Create or update .npmrc file with the token
       - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
         env:
