@@ -16,7 +16,7 @@ jobs:
           node-version: '16.x'
           registry-url: 'https://registry.npmjs.org'
           scope: '@your-scope'  # Add this if you're publishing a scoped package
-      - run: npm ci  # Using 'npm ci' instead of 'npm i' for more reliable CI builds
+      - run: npm i  # Using 'npm ci' instead of 'npm i' for more reliable CI builds
       # Create or update .npmrc file with the token
       - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
       - run: npm publish --access public  # Add --access public for scoped packages
