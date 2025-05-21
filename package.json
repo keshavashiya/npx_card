@@ -1,6 +1,6 @@
 {
   "name": "keshavashiya",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "A personal card for Keshav Ashiya (@keshavashiya)",
   "main": "card.js",
   "bin": {
